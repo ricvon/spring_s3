@@ -1,3 +1,4 @@
+import { routes } from './../app.routes';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { ClienteService } from '../cliente.service';
 import { Cliente } from '../cadastro/cliente';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-consulta',
@@ -29,9 +31,12 @@ export class Consulta implements OnInit {
 
   nomeBusca: string = '';
   listaClientes: Cliente[] = [];
-  colunasTable: string[] = ["id", "nome", "cpf", "dataNascimento", "email"];
+  colunasTable: string[] = ["id", "nome", "cpf", "dataNascimento", "email", "acoes"];
 
-  constructor(private service: ClienteService){
+  constructor(
+    private service: ClienteService,
+    private router: Router
+  ){
 
   }
 
@@ -42,5 +47,11 @@ export class Consulta implements OnInit {
 
   pesquisar(){
     this.listaClientes = this.service.pesquisarClientes(this.nomeBusca);
+  }
+
+  preparaEditar(id: string){
+    //console.log ("id recebido: ", id);
+    this.router.navigate(['/cadastro'], {queryParams:{"id" : id}});
+
   }
 }
