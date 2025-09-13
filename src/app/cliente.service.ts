@@ -30,6 +30,7 @@ export class ClienteService {
 
   deletar(cliente:Cliente){
     const storage = this.obterStorage();
+
     const novaLista = storage.filter(c => c.id !== cliente.id);
     /*const indexItem = storage.indexOf(cliente);
     if (indexItem > -1){
