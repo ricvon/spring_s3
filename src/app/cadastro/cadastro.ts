@@ -8,7 +8,7 @@ import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatSelectModule} from  '@angular/material/select';
+import {MatSelectChange, MatSelectModule} from  '@angular/material/select';
 import {Cliente} from './cliente';
 import {ClienteService} from '../cliente.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -59,17 +59,31 @@ export class Cadastro implements OnInit{
           if (clienteEncontrado){
             this.atualizando = true;
             this.cliente = clienteEncontrado;
+            if (this.cliente.uf){
+              const event = {value: this.cliente.uf}
+              this.carregarMunicipios(event as MatSelectChange);
+              //this.carregarUFs();
+            }
           }
         }
         //console.log("Parametros: ", params);
       })
       this.carregarUFs();
+
   }
 
   carregarUFs(){
     //observable subscriber
     this.brasilapiService.listarUFs().subscribe({
       next: listaEstados => this.estados = listaEstados,//console.log("lista estados", listaEstados),
+      error:erro=>console.log("ocorreu um erro:", erro)
+    });
+  }
+
+  carregarMunicipios(event: MatSelectChange){
+    const ufSelecionada = event.value;
+    this.brasilapiService.listarMunicipios(ufSelecionada).subscribe({
+      next: listaMunicipios => this.municipios = listaMunicipios,//console.log("lista estados", listaEstados),
       error:erro=>console.log("ocorreu um erro:", erro)
     });
   }
